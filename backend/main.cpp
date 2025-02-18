@@ -45,7 +45,7 @@ std::vector<Process> generateRandomProcesses(int count) {
     std::mt19937 gen(rd());
     
     // Random distributions
-    std::uniform_int_distribution<> burstTimeDist(1, 20);
+    std::uniform_int_distribution<> burstTimeDist(1, 100);
     std::uniform_int_distribution<> arrivalTimeDist(0, count < 10 ? 10 : count*2);
     std::uniform_int_distribution<> priorityDist(1, 10);
     
