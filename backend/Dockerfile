@@ -20,13 +20,11 @@ COPY main.cpp .
 COPY ./vcpkg ./vcpkg
 
 # Build the application
-RUN mkdir -p build && cd build && \
-    cmake .. && \
-    make
+RUN mkdir -p build && cd build && make 
 
 # Expose the port your application uses
 EXPOSE 8080
 
 # Command to run the executable
 # Assuming your executable name is "process_schd" and it's in the build directory
-CMD ["./build/process_sched"]
+CMD ["./build/process_scheduler"]
