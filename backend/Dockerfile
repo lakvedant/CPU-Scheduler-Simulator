@@ -19,8 +19,12 @@ COPY CMakeLists.txt .
 COPY main.cpp .
 COPY ./vcpkg ./vcpkg
 
+# Install Crow using vcpkg
+RUN ./vcpkg/bootstrap-vcpkg.sh && \
+    ./vcpkg/vcpkg install crow
+
 # Build the application
-RUN mkdir -p build && cd build && cmake .. && make 
+RUN mkdir -p build && cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=/app/vcpkg/scripts/buildsystems/vcpkg.cmake && make 
 
 # Expose the port your application uses
 EXPOSE 8080
