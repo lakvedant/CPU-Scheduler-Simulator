@@ -11,20 +11,23 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     curl
 
+# Install Crow
+RUN git clone https://github.com/CrowCpp/Crow.git /tmp/crow \
+    && cd /tmp/crow \
+    && mkdir build && cd build \
+    && cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF \
+    && make install \
+    && cd / && rm -rf /tmp/crow
+
 # Create app directory
 WORKDIR /app
 
 # Copy CMake configuration and source files
 COPY CMakeLists.txt .
 COPY main.cpp .
-COPY ./vcpkg ./vcpkg
-
-# Install Crow using vcpkg
-RUN ./vcpkg/bootstrap-vcpkg.sh && \
-    ./vcpkg/vcpkg install crow
 
 # Build the application
-RUN mkdir -p build && cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=/app/vcpkg/scripts/buildsystems/vcpkg.cmake && make 
+RUN mkdir -p build && cd build && cmake .. && make 
 
 # Expose the port your application uses
 EXPOSE 8080
