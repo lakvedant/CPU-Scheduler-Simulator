@@ -5,19 +5,28 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
-    curl \
-    [any other dependencies]
+    libboost-all-dev \
+    openssl \
+    libssl-dev \
+    zlib1g-dev \
+    curl
 
+# Create app directory
 WORKDIR /app
 
-# Copy your source code
-COPY . .
+# Copy CMake configuration and source files
+COPY CMakeLists.txt .
+COPY main.cpp .
+COPY ./vcpkg ./vcpkg
 
-# Build your application
-RUN cmake . && make
+# Build the application
+RUN mkdir -p build && cd build && \
+    cmake .. && \
+    make
 
-# Expose the port your app runs on
+# Expose the port your application uses
 EXPOSE 8080
 
-# Command to run your executable
-CMD ["./process_schdeduler"]
+# Command to run the executable
+# Assuming your executable name is "process_schd" and it's in the build directory
+CMD ["./build/process_sched"]
