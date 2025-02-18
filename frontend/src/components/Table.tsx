@@ -20,7 +20,7 @@ interface Process {
   priority: number;
 }
 
-const ProcessTable = () => {
+const PT = () => {
   const [processes, setProcesses] = useState<Process[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -97,4 +97,4 @@ const ProcessTable = () => {
   );
 };
 
-export default ProcessTable;
+export default PT;

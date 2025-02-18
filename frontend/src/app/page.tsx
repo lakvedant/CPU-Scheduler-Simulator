@@ -1,10 +1,11 @@
-import ProcessTable from "@/components/Table";
-import Image from "next/image";
+import Complete from "@/components/Complete";
+
+
 
 export default function Home() {
   return (
     <div>
-      <ProcessTable />
+      <Complete/>
     </div>
   );
 }

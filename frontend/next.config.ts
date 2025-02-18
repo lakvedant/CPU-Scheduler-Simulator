@@ -4,8 +4,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/processes",
-        destination: "http://localhost:8080/processes",
+        source: "/api/processes/:count",
+        destination: "http://localhost:8080/api/processes/:count", // Fixed URL
+      },
+      {
+        source: "/api/schedule",
+        destination: "http://localhost:8080/api/schedule", // Added missing route
       },
     ];
   },
