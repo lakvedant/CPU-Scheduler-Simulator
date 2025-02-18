@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     openssl \
     libssl-dev \
     zlib1g-dev \
+    asio-dev \
     curl
 
 # Install Crow
