@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy CMake configuration and source files
-COPY backend/ .
+COPY CMakeLists.txt .
+COPY main.cpp .
+COPY ./vcpkg ./vcpkg
 
 # Build the application
 RUN mkdir -p build && cd build && cmake .. && make 
