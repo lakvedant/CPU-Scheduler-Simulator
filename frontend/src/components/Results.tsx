@@ -22,7 +22,6 @@ export default function ResultsTable({ results }: ResultsTableProps) {
           <TableHead>Avg Turnaround Time</TableHead>
           <TableHead>Avg Waiting Time</TableHead>
           <TableHead>Avg Response Time</TableHead>
-          <TableHead>CPU Utilization</TableHead>
           <TableHead>Throughput</TableHead>
         </TableRow>
       </TableHeader>
@@ -33,7 +32,6 @@ export default function ResultsTable({ results }: ResultsTableProps) {
             <TableCell>{result.avgTurnaroundTime.toFixed(2)}</TableCell>
             <TableCell>{result.avgWaitingTime.toFixed(2)}</TableCell>
             <TableCell>{result.avgResponseTime.toFixed(2)}</TableCell>
-            <TableCell>{result.cpuUtilization.toFixed(2)}%</TableCell>
             <TableCell>{result.throughput.toFixed(2)}</TableCell>
           </TableRow>
         ))}

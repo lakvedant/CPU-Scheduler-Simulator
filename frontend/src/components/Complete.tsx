@@ -1,5 +1,5 @@
 "use client"
-
+import { useEffect } from "react";
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,12 +11,17 @@ import { Separator } from "@/components/ui/separator"
 import ProcessTable from "@/components/ProcessTable"
 import GanttChart from "@/components/GranttChart"
 import ResultsTable from "@/components/Results"
+import DetailedMetricsTable from "@/components/Detailed"
 
 interface Process {
   id: number
   arrivalTime: number
   burstTime: number
   priority: number
+  completionTime: number
+  turnaroundTime?: number
+  waitingTime?: number
+  responseTime?: number
 }
 
 interface AlgorithmResult {
@@ -24,10 +29,13 @@ interface AlgorithmResult {
   avgTurnaroundTime: number
   avgWaitingTime: number
   avgResponseTime: number
-  cpuUtilization: number
   throughput: number
+  cpuUtilization: number
   ganttChart: { processId: number; startTime: number; endTime: number }[]
+  processes: Process[]
 }
+
+
 
 export default function Complete() {
   const [processes, setProcesses] = useState<Process[]>([])
@@ -73,6 +81,7 @@ export default function Complete() {
       })
       const data = await response.json()
       setResults(data)
+      console.log(results)
     } catch (error) {
       console.error("Failed to run simulation:", error)
     } finally {
@@ -88,6 +97,13 @@ export default function Complete() {
     priority: "Priority (Non-preemptive)",
     priorityPreemptive: "Priority (Preemptive)",
   }
+
+
+
+useEffect(() => {
+  console.log("Updated Results:", results);
+}, [results]);
+
 
   return (
     <div className="container mx-auto py-8 px-4 ">
@@ -216,7 +232,10 @@ export default function Complete() {
                 <TabsList className="w-full bg-gray-100 p-1 mb-6">
                   <TabsTrigger value="comparative" className="flex-1 font-medium">Comparison</TabsTrigger>
                   <TabsTrigger value="individual" className="flex-1 font-medium">Individual Results</TabsTrigger>
+                  <TabsTrigger value="detailed" className="flex-1 font-medium">Detailed Process Metrics</TabsTrigger>
                 </TabsList>
+
+                
 
                 <TabsContent value="comparative">
                   <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 mb-6">
@@ -230,12 +249,17 @@ export default function Complete() {
                     {results.map((result, index) => (
                       <Card key={index} className="overflow-hidden bg-white border-l-4" style={{ borderLeftColor: `hsl(${index * 60}, 70%, 60%)` }}>
                         <CardHeader className="bg-gray-50">
-                          <CardTitle className="flex items-center gap-2 text-xl text-indigo-800">
+                        <CardTitle className="flex items-center gap-2 text-xl text-indigo-800">
                             <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 text-indigo-800 font-bold text-sm">
                               {index + 1}
                             </span>
                             {result.name}
                           </CardTitle>
+
+                          {result.name.toLowerCase() === "sjf" && (
+                            <p className="text-sm text-gray-600">All processes are considered at arrival time 0.</p>
+                          )}
+
                         </CardHeader>
                         <CardContent className="pt-4">
                           <div className="mb-4">
@@ -262,13 +286,9 @@ export default function Complete() {
                                 <p className="text-sm font-medium text-purple-800">Average Response Time</p>
                                 <p className="text-2xl font-bold text-purple-900">{result.avgResponseTime.toFixed(2)}</p>
                               </div>
-                              <div className="p-3 rounded-lg bg-amber-50 border border-amber-100">
-                                <p className="text-sm font-medium text-amber-800">CPU Utilization</p>
-                                <p className="text-2xl font-bold text-amber-900">{result.cpuUtilization.toFixed(2)}%</p>
-                              </div>
-                              <div className="p-3 rounded-lg bg-indigo-50 border border-indigo-100 sm:col-span-2">
-                                <p className="text-sm font-medium text-indigo-800">Throughput</p>
-                                <p className="text-2xl font-bold text-indigo-900">{result.throughput.toFixed(2)} processes/unit time</p>
+                              <div className="p-3 rounded-lg bg-purple-50 border border-purple-100">
+                                <p className="text-sm font-medium text-purple-800">Throughput</p>
+                                <p className="text-2xl font-bold text-purple-900">{result.throughput.toFixed(2)} processes/unit time</p>
                               </div>
                             </div>
                           </div>
@@ -277,13 +297,19 @@ export default function Complete() {
                     ))}
                   </div>
                 </TabsContent>
+                <TabsContent value="detailed">
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 mb-6">
+                  <h3 className="text-lg font-semibold text-indigo-800 mb-4">Detailed Process Metrics</h3>
+                  <DetailedMetricsTable results={results} />
+                </div>
+              </TabsContent>
               </Tabs>
             </div>
           )}
         </CardContent>
         <CardFooter className="flex justify-center pt-0 pb-6">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} CPU Scheduling Simulator | All Rights Reserved
+            © {new Date().getFullYear()} CPU Scheduling Simulator | U23AI015
           </p>
         </CardFooter>
       </Card>

@@ -281,8 +281,8 @@ AlgorithmResult srtn(vector<Process> processes) {
 // Round Robin (RR) Algorithm
 AlgorithmResult roundRobin(std::vector<Process> processes, int timeQuantum) {
     vector<GanttEntry> ganttChart;
-    std::deque<Process*> readyQueue;
-    std::vector<Process*> remainingProcesses;
+    deque<Process*> readyQueue;
+    vector<Process*> remainingProcesses;
 
     for (auto& p : processes) {
         p.completionTime = 0;
@@ -293,11 +293,11 @@ AlgorithmResult roundRobin(std::vector<Process> processes, int timeQuantum) {
         remainingProcesses.push_back(&p);
     }
 
-    std::sort(remainingProcesses.begin(), remainingProcesses.end(), [](const Process* a, const Process* b) {
+    sort(remainingProcesses.begin(), remainingProcesses.end(), [](const Process* a, const Process* b) {
         return a->arrivalTime < b->arrivalTime;
     });
 
-    std::vector<std::pair<Process*, int>> remainingBurstTimes;
+    vector<pair<Process*, int>> remainingBurstTimes;
     for (auto* p : remainingProcesses) {
         remainingBurstTimes.push_back({p, p->burstTime});
     }
@@ -553,7 +553,7 @@ AlgorithmResult priorityPreemptive(std::vector<Process> processes) {
     }
 
     // Clean up gantt chart by merging consecutive entries with same process
-    std::vector<GanttEntry> mergedGanttChart;
+    vector<GanttEntry> mergedGanttChart;
     for (const auto& entry : ganttChart) {
         if (mergedGanttChart.empty() || mergedGanttChart.back().processId != entry.processId) {
             mergedGanttChart.push_back(entry);
